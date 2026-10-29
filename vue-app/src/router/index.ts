@@ -4,8 +4,15 @@ import { useAuthStore } from '@/stores/AuthStore'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', name: 'home', component: () => import('@/views/HomeView.vue'), meta: { requiresAuth: true } },
-    { path: '/all-tasks', name: 'all-tasks', component: () => import('@/views/AllTasksView.vue'), meta: { requiresAuth: true } },
+    {
+      path: '/',
+      component: () => import('@/layouts/MainLayout.vue'),
+      meta: { requiresAuth: true },
+      children: [
+        { path: '', name: 'home', component: () => import('@/views/HomeView.vue') },
+        { path: 'all-tasks', name: 'all-tasks', component: () => import('@/views/AllTasksView.vue') },
+      ],
+    },
     { path: '/login', name: 'login', component: () => import('@/views/LoginView.vue') },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],

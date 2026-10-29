@@ -32,10 +32,13 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const isAuthenticated = () => currentUser.value !== null
+  const isLoading = ref(false)
+  const errorText = ref<string | null>(null)
 
   ////////////////////////////////////////////////////////////////////
 
   const login = async(email:string)=>{
+    isLoading.value = true
     const request : ApiDefinition.Login.IRequest = {
       email
     }
@@ -48,9 +51,13 @@ export const useAuthStore = defineStore('auth', () => {
         department: response.department,
         jwtToken: response.jwtToken
       })
+      window.location.href = "/"
     } catch (error) {
       console.error('Login failed', error)
+      errorText.value = 'Login failed. Check your email and try again.'
       throw error
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -62,7 +69,9 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     currentUser,
     isAuthenticated,
+    isLoading,
     login,
-    logout
+    logout,
+    errorText
   }
 })

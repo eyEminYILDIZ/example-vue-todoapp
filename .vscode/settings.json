@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^mkdir -p /home/radmin/xworkspace/personal/example-vue-todoapp/vue-app/src/layouts$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
