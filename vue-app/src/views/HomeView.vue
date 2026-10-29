@@ -7,8 +7,11 @@ const authStore = useAuthStore()
 <template>
   <div class="home">
     <h1>Home</h1>
-    <p>Welcome, {{ authStore.currentUser?.name }}</p>
-    <button @click="authStore.logout()">Log Out</button>
+    <div class="user-section">
+      <p>Welcome, {{ authStore.currentUser?.name }}</p>
+      <button @click="authStore.logout()">Log Out</button>
+    </div>
+    <router-link to="/all-tasks">View All Tasks</router-link>
   </div>
 </template>
 
@@ -16,5 +19,13 @@ const authStore = useAuthStore()
 .home {
   max-width: 600px;
   margin: 4rem auto;
+}
+.user-section {
+  margin: 2rem;
+  padding: 1rem;
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 </style>

@@ -24,7 +24,8 @@ export namespace ApiDefinition {
   }
 
   export namespace AllUsers {
-    export const Method = "GET"
+    export const Path = "/auth/all-users"
+    export const Request = (_data?: IRequest) => ApiService.call<IResponse>(AxiosClient.get(Path));
     export interface IRequest {
       empty: string
     }
@@ -39,7 +40,8 @@ export namespace ApiDefinition {
 
 
   export namespace Me {
-    export const Method = "GET"
+    export const Path = "/auth/me"
+    export const Request = (_data?: IRequest) => ApiService.call<IResponse>(AxiosClient.get(Path));
     export interface IRequest {
       empty: string
     }
@@ -53,7 +55,8 @@ export namespace ApiDefinition {
   }
 
   export namespace GetAllTasks {
-    export const Method = "GET"
+    export const Path = "/task"
+    export const Request = (_data?: IRequest) => ApiService.call<IResponse>(AxiosClient.get(Path));
     export interface IRequest {
       empty: string
     }
@@ -71,7 +74,8 @@ export namespace ApiDefinition {
   }
 
   export namespace ResetData {
-    export const Method = "GET"
+    export const Path = "/task/reset-data"
+    export const Request = (_data?: IRequest) => ApiService.call<IResponse>(AxiosClient.get(Path));
     export interface IRequest {
       empty: string
     }
@@ -89,7 +93,8 @@ export namespace ApiDefinition {
   }
 
   export namespace GetMyTasks {
-    export const Method = "GET"
+    export const Path = "/task/my-tasks"
+    export const Request = (_data?: IRequest) => ApiService.call<IResponse>(AxiosClient.get(Path));
     export interface IRequest {
       empty: string
     }
@@ -107,7 +112,8 @@ export namespace ApiDefinition {
   }
 
   export namespace GetPendingTasks {
-    export const Method = "GET"
+    export const Path = "/task/pendings"
+    export const Request = (_data?: IRequest) => ApiService.call<IResponse>(AxiosClient.get(Path));
     export interface IRequest {
       empty: string
     }
@@ -125,7 +131,8 @@ export namespace ApiDefinition {
   }
 
   export namespace GetTask {
-    export const Method = "GET"
+    export const Path = (taskId: number) => `/task/${taskId}`
+    export const Request = (data: IRequest) => ApiService.call<IResponse>(AxiosClient.get(Path(data.taskId)));
     export interface IRequest {
       taskId: number
     }
@@ -143,7 +150,8 @@ export namespace ApiDefinition {
   }
 
   export namespace CreateTask {
-    export const Method = "POST"
+    export const Path = "/task"
+    export const Request = (data: IRequest) => ApiService.call<IResponse>(AxiosClient.post(Path, { ...data }));
     export interface IRequest {
       title: string
       description: string
@@ -163,7 +171,8 @@ export namespace ApiDefinition {
   }
 
   export namespace UpdateTask {
-    export const Method = "PUT"
+    export const Path = (taskId: number) => `/task/${taskId}`
+    export const Request = ({ taskId, ...body }: IRequest) => ApiService.call<IResponse>(AxiosClient.put(Path(taskId), body));
     export interface IRequest {
       taskId: number
       title: string
@@ -183,7 +192,8 @@ export namespace ApiDefinition {
   }
 
   export namespace DeleteTask {
-    export const Method = "DELETE"
+    export const Path = (taskId: number) => `/task/${taskId}`
+    export const Request = (data: IRequest) => ApiService.call<IResponse>(AxiosClient.delete(Path(data.taskId)));
     export interface IRequest {
       taskId: number
     }
@@ -201,7 +211,8 @@ export namespace ApiDefinition {
   }
 
   export namespace CompleteTask {
-    export const Method = "GET"
+    export const Path = (taskId: number) => `/task/complete/${taskId}`
+    export const Request = (data: IRequest) => ApiService.call<IResponse>(AxiosClient.get(Path(data.taskId)));
     export interface IRequest {
       taskId: number
     }
@@ -219,7 +230,8 @@ export namespace ApiDefinition {
   }
 
   export namespace RejectTask {
-    export const Method = "GET"
+    export const Path = (taskId: number) => `/task/reject/${taskId}`
+    export const Request = (data: IRequest) => ApiService.call<IResponse>(AxiosClient.get(Path(data.taskId)));
     export interface IRequest {
       taskId: number
     }
