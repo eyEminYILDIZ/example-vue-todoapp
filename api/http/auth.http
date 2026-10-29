@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:5000/api
+
+### Login
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "mary@company.com"
+}
+
+###
+
+@token = {{login.response.body.payload.jwtToken}}
+
+### All users
+GET {{baseUrl}}/auth/all-users
+
+### Me (run Login first)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}

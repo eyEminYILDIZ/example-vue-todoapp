@@ -1,0 +1,68 @@
+@baseUrl = http://localhost:5000/api
+
+### Login (run first to obtain the token)
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "mary@company.com"
+}
+
+###
+
+@token = {{login.response.body.payload.jwtToken}}
+@taskId = 8054
+
+### Get all tasks
+GET {{baseUrl}}/task
+Authorization: Bearer {{token}}
+
+### Reset data
+GET {{baseUrl}}/task/reset-data
+Authorization: Bearer {{token}}
+
+### Get my tasks
+GET {{baseUrl}}/task/my-tasks
+Authorization: Bearer {{token}}
+
+### Get pending tasks
+GET {{baseUrl}}/task/pendings
+Authorization: Bearer {{token}}
+
+### Get task
+GET {{baseUrl}}/task/{{taskId}}
+Authorization: Bearer {{token}}
+
+### Create task
+POST {{baseUrl}}/task
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "title": "Write Code",
+    "description": "Write appropriate codes for solving this problem",
+    "assignedDepartment": 2
+}
+
+### Update task
+PUT {{baseUrl}}/task/4381
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "title": "All Products Price List",
+    "description": "We need to All Products Price List in this week, Thanks"
+}
+
+### Delete task
+DELETE {{baseUrl}}/task/4381
+Authorization: Bearer {{token}}
+
+### Complete task
+GET {{baseUrl}}/task/complete/{{taskId}}
+Authorization: Bearer {{token}}
+
+### Reject task
+GET {{baseUrl}}/task/reject/{{taskId}}
+Authorization: Bearer {{token}}
