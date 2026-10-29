@@ -11,6 +11,8 @@ const router = createRouter({
       children: [
         { path: '', name: 'home', component: () => import('@/views/HomeView.vue') },
         { path: 'all-tasks', name: 'all-tasks', component: () => import('@/views/AllTasksView.vue') },
+        { path: 'my-tasks', name: 'my-tasks', component: () => import('@/views/MyTasksView.vue') },
+        { path: 'pending-tasks', name: 'pending-tasks', component: () => import('@/views/PendingTasksView.vue') },
       ],
     },
     { path: '/login', name: 'login', component: () => import('@/views/LoginView.vue') },
