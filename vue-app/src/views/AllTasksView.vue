@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/TaskStore'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+import TaskList from '@/components/TaskList.vue'
+import type { ITaskRow } from '@/types'
 
 const taskStore = useTaskStore()
-
+const tasks = ref<ITaskRow[]>([])
 onMounted(async () => {
   await taskStore.loadAllTasks()
+  tasks.value = taskStore.AllTasks.map((task) => ({
+    id: task.id,
+    title: task.title,
+    description: task.description,
+    user: task.user.name,
+    assignedDepartment: task.assignedDepartment,
+    status: task.status,
+  }))
 })
 </script>
 
@@ -13,28 +23,7 @@ onMounted(async () => {
   <main class="tasks-page">
     <h1>All Tasks</h1>
     <p v-if="taskStore.isLoading">Loading tasks...</p>
-    <table v-else>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Requested by</th>
-          <th>Department</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="task in taskStore.AllTasks" :key="task.id">
-          <td>{{ task.id }}</td>
-          <td>{{ task.title }}</td>
-          <td>{{ task.description }}</td>
-          <td>{{ task.user.name }}</td>
-          <td>{{ task.assignedDepartment }}</td>
-          <td>{{ ['Pending', 'Completed', 'Rejected'][task.status] ?? 'Unknown' }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <TaskList v-else :title="'All Tasks'" :tasks="tasks" />
   </main>
 </template>
 
