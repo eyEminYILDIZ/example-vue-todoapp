@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --bg: #f5f6fa;
   --surface: #fff;
@@ -31,25 +33,27 @@ body {
   color: var(--text);
 }
 
-button {
-  padding: 0.45rem 0.8rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font: inherit;
-  background: var(--surface);
-  color: inherit;
-  cursor: pointer;
-}
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-button.primary {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
-}
-button.danger {
-  color: var(--danger);
-  border-color: var(--danger);
+@layer base {
+  button {
+    padding: 0.45rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font: inherit;
+    background: var(--surface);
+    color: inherit;
+    cursor: pointer;
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  button.primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+  }
+  button.danger {
+    color: var(--danger);
+    border-color: var(--danger);
+  }
 }
