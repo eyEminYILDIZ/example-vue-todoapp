@@ -18,7 +18,7 @@ const priorityLabels: Record<Priority, string> = {
 
 const editing = ref(false)
 
-function onUpdate(input: TodoInput) {
+const onUpdate = (input: TodoInput) => {
   emit('update', input)
   editing.value = false
 }

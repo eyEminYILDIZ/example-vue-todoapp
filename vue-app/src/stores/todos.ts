@@ -4,7 +4,7 @@ import type { Todo, TodoFilter, TodoInput } from '@/types/todo'
 
 const STORAGE_KEY = 'todo-app:todos'
 
-function loadTodos(): Todo[] {
+const loadTodos = (): Todo[] => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     return raw ? (JSON.parse(raw) as Todo[]) : []
@@ -30,7 +30,7 @@ export const useTodoStore = defineStore('todos', () => {
   const activeCount = computed(() => todos.value.filter((t) => !t.completed).length)
   const completedCount = computed(() => todos.value.length - activeCount.value)
 
-  function addTodo(input: TodoInput) {
+  const addTodo = (input: TodoInput) => {
     todos.value.unshift({
       id: crypto.randomUUID(),
       ...input,
@@ -39,25 +39,25 @@ export const useTodoStore = defineStore('todos', () => {
     })
   }
 
-  function updateTodo(id: string, input: TodoInput) {
+  const updateTodo = (id: string, input: TodoInput) => {
     const todo = todos.value.find((t) => t.id === id)
     if (todo) Object.assign(todo, input)
   }
 
-  function toggleTodo(id: string) {
+  const toggleTodo = (id: string) => {
     const todo = todos.value.find((t) => t.id === id)
     if (todo) todo.completed = !todo.completed
   }
 
-  function removeTodo(id: string) {
+  const removeTodo = (id: string) => {
     todos.value = todos.value.filter((t) => t.id !== id)
   }
 
-  function clearCompleted() {
+  const clearCompleted = () => {
     todos.value = todos.value.filter((t) => !t.completed)
   }
 
-  function setFilter(value: TodoFilter) {
+  const setFilter = (value: TodoFilter) => {
     filter.value = value
   }
 

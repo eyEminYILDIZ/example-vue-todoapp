@@ -6,9 +6,7 @@ const STORAGE_KEY = 'CurrentUser'
 
 export const useAuthStore = defineStore('auth', () => {
 
-  const currentUser = ref<ICurrentUser | null>(loadCurrentUser())
-
-  function loadCurrentUser(): ICurrentUser | null {
+  const loadCurrentUser = (): ICurrentUser | null => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       return raw ? (JSON.parse(raw) as ICurrentUser) : null
@@ -16,6 +14,8 @@ export const useAuthStore = defineStore('auth', () => {
       return null
     }
   }
+
+  const currentUser = ref<ICurrentUser | null>(loadCurrentUser())
 
   const setCurrentUser = (user: ICurrentUser | null) => {
     currentUser.value = user

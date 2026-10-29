@@ -29,7 +29,7 @@ watch(
   { immediate: true },
 )
 
-function onSubmit() {
+const onSubmit = () => {
   touched = true
   if (titleError.value) return
   emit('submit', {
