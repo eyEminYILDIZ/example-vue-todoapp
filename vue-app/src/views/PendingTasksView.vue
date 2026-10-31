@@ -25,7 +25,13 @@ onMounted(async () => {
   <main class="tasks-page">
     <h1>Pending Tasks</h1>
     <p v-if="taskStore.isLoading">Loading tasks...</p>
-    <TaskList v-else :title="'Pending Tasks'" :tasks="tasks" />
+    <TaskList
+      v-else
+      :title="'Pending Tasks'"
+      :tasks="tasks"
+      :approve-allowed="true"
+      :reject-allowed="true"
+    />
   </main>
 </template>
 

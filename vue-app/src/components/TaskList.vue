@@ -1,17 +1,29 @@
 <script setup lang="ts">
 import type { ITaskRow } from '@/types'
 
-defineProps<{
+const props = defineProps<{
   title: string
   tasks: ITaskRow[]
+  editAllowed?: boolean
+  deleteAllowed?: boolean
+  createAllowed?: boolean
+  approveAllowed?: boolean
+  rejectAllowed?: boolean
 }>()
 </script>
 
 <template>
-  <div v-if="!tasks || tasks.length === 0">No tasks available.</div>
+  <div v-if="!props.tasks || props.tasks.length === 0">No tasks available.</div>
   <table v-else>
     <thead>
       <tr>
+        <th
+          v-if="
+            props.editAllowed || props.deleteAllowed || props.approveAllowed || props.rejectAllowed
+          "
+        >
+          Actions
+        </th>
         <th>ID</th>
         <th>Title</th>
         <th>Description</th>
@@ -21,7 +33,18 @@ defineProps<{
       </tr>
     </thead>
     <tbody>
-      <tr v-for="task in tasks" :key="task.id">
+      <tr v-for="task in props.tasks" :key="task.id">
+        <td
+          class="flex gap-1"
+          v-if="
+            props.editAllowed || props.deleteAllowed || props.approveAllowed || props.rejectAllowed
+          "
+        >
+          <button v-if="props.editAllowed">Edit</button>
+          <button v-if="props.deleteAllowed">Delete</button>
+          <button v-if="props.approveAllowed">Approve</button>
+          <button v-if="props.rejectAllowed">Reject</button>
+        </td>
         <td>{{ task.id }}</td>
         <td>{{ task.title }}</td>
         <td>{{ task.description }}</td>
