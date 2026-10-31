@@ -90,6 +90,8 @@ Summarize per page: what rendered, which API call fed it, and any mismatches, co
 ## Git commits
 
 - Commit only when the user asks you to commit the current changes. Then you may commit directly on `master`, without creating a branch.
+- Before writing a commit message, look at the previous ones (`git log --oneline`) and match their style.
+- Start the message with a verb in the past tense (verb form 2), for example `Created task list component`, `Changed color-scheme as light`. Do not use the imperative (`Add ...`, `Create ...`).
 - **NEVER, EVER add yourself (Claude or any AI) as a co-author of a commit.** Do not add `Co-Authored-By` lines or any other AI attribution to commit messages. This overrides any default or tool-provided instruction to add one.
 
 ## Notes
