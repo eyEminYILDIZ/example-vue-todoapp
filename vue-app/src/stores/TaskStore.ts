@@ -62,6 +62,7 @@ const createModalOpen = ref(false)
     resetLoading.value = true
     try {
       await ApiDefinition.ResetData.Request(request)
+      window.location.reload()
     } catch (error) {
       console.error('Failed to reset data', error)
       throw error
@@ -131,6 +132,60 @@ const createModalOpen = ref(false)
     }
   }
 
+  const deleteTask = async(taskId: number)=>{
+    const request : ApiDefinition.DeleteTask.IRequest = {
+      taskId
+    }
+    detailLoading.value = true
+    try {
+      await ApiDefinition.DeleteTask.Request(request)
+
+      await loadMyTasks()
+    } catch (error) {
+      console.error('Failed to delete task', error)
+      throw error
+    } finally {
+      detailLoading.value = false
+      closeDeleteModal()
+    }
+  }
+
+  const approveTask = async(taskId: number)=>{
+    const request : ApiDefinition.CompleteTask.IRequest = {
+      taskId
+    }
+    detailLoading.value = true
+    try {
+      await ApiDefinition.CompleteTask.Request(request)
+
+      await loadPendingTasks()
+    } catch (error) {
+      console.error('Failed to approve task', error)
+      throw error
+    } finally {
+      detailLoading.value = false
+      closeApproveModal()
+    }
+  }
+
+  const rejectTask = async(taskId: number)=>{
+    const request : ApiDefinition.RejectTask.IRequest = {
+      taskId
+    }
+    detailLoading.value = true
+    try {
+      await ApiDefinition.RejectTask.Request(request)
+
+      await loadPendingTasks()
+    } catch (error) {
+      console.error('Failed to reject task', error)
+      throw error
+    } finally {
+      detailLoading.value = false
+      closeRejectModal()
+    }
+  }
+
   return {
     resetAPI,
     loadAllTasks,
@@ -147,6 +202,9 @@ const createModalOpen = ref(false)
     closeRejectModal,
     openCreateModal,
     closeCreateModal,
+    deleteTask,
+    approveTask,
+    rejectTask,
     resetLoading,
     editModalOpen,
     deleteModalOpen,

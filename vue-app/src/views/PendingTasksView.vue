@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/TaskStore'
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 import type { ITaskRow } from '@/types'
 import { ref } from 'vue'
@@ -11,15 +11,21 @@ const tasks = ref<ITaskRow[]>([])
 
 onMounted(async () => {
   await taskStore.loadPendingTasks()
-  tasks.value = taskStore.PendingTasks.map((task) => ({
-    id: task.id,
-    title: task.title,
-    description: task.description,
-    user: task.user.name,
-    assignedDepartment: task.assignedDepartment,
-    status: task.status,
-  }))
 })
+
+watch(
+  () => taskStore.PendingTasks,
+  () => {
+    tasks.value = taskStore.PendingTasks.map((task) => ({
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      user: task.user.name,
+      assignedDepartment: task.assignedDepartment,
+      status: task.status,
+    }))
+  },
+)
 
 const onApproveTask = async (taskId: number) => {
   await taskStore.loadTask(taskId)
@@ -60,7 +66,12 @@ const onRejectTask = async (taskId: number) => {
 
           <div class="dialog-actions">
             <button @click="taskStore.closeApproveModal()">Cancel</button>
-            <button class="primary" @click="taskStore.closeApproveModal()">Approve</button>
+            <button
+              class="primary"
+              @click="taskStore.approveTask(taskStore.PlayableTask?.id ?? -1)"
+            >
+              Approve
+            </button>
           </div>
         </DialogPanel>
       </div>
@@ -82,7 +93,9 @@ const onRejectTask = async (taskId: number) => {
 
           <div class="dialog-actions">
             <button @click="taskStore.closeRejectModal()">Cancel</button>
-            <button class="primary" @click="taskStore.closeRejectModal()">Reject</button>
+            <button class="primary" @click="taskStore.rejectTask(taskStore.PlayableTask?.id ?? -1)">
+              Reject
+            </button>
           </div>
         </DialogPanel>
       </div>

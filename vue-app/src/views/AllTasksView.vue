@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/TaskStore'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import TaskList from '@/components/TaskList.vue'
 import type { ITaskRow } from '@/types'
 
@@ -8,15 +8,21 @@ const taskStore = useTaskStore()
 const tasks = ref<ITaskRow[]>([])
 onMounted(async () => {
   await taskStore.loadAllTasks()
-  tasks.value = taskStore.AllTasks.map((task) => ({
-    id: task.id,
-    title: task.title,
-    description: task.description,
-    user: task.user.name,
-    assignedDepartment: task.assignedDepartment,
-    status: task.status,
-  }))
 })
+
+watch(
+  () => taskStore.AllTasks,
+  () => {
+    tasks.value = taskStore.AllTasks.map((task) => ({
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      user: task.user.name,
+      assignedDepartment: task.assignedDepartment,
+      status: task.status,
+    }))
+  },
+)
 </script>
 
 <template>

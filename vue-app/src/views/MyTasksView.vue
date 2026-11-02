@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/TaskStore'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 import type { ITaskRow } from '@/types'
 import TaskList from '@/components/TaskList.vue'
@@ -10,15 +10,21 @@ const tasks = ref<ITaskRow[]>([])
 
 onMounted(async () => {
   await taskStore.loadMyTasks()
-  tasks.value = taskStore.MyTasks.map((task) => ({
-    id: task.id,
-    title: task.title,
-    description: task.description,
-    user: task.user.name,
-    assignedDepartment: task.assignedDepartment,
-    status: task.status,
-  }))
 })
+
+watch(
+  () => taskStore.MyTasks,
+  () => {
+    tasks.value = taskStore.MyTasks.map((task) => ({
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      user: task.user.name,
+      assignedDepartment: task.assignedDepartment,
+      status: task.status,
+    }))
+  },
+)
 
 const onEditTask = async (taskId: number) => {
   await taskStore.loadTask(taskId)
@@ -48,8 +54,6 @@ const onDeleteTask = async (taskId: number) => {
       @on-edit="onEditTask"
       @on-delete="onDeleteTask"
     />
-    <br />
-    <br />
     <!-- EDIT MODAL -->
     <Dialog class="dialog-root" :open="taskStore.editModalOpen" @close="taskStore.closeEditModal">
       <div class="dialog-backdrop" aria-hidden="true" />
@@ -85,7 +89,9 @@ const onDeleteTask = async (taskId: number) => {
 
           <div class="dialog-actions">
             <button @click="taskStore.closeDeleteModal()">Cancel</button>
-            <button class="primary" @click="taskStore.closeDeleteModal()">Delete</button>
+            <button class="primary" @click="taskStore.deleteTask(taskStore.PlayableTask?.id ?? -1)">
+              Delete
+            </button>
           </div>
         </DialogPanel>
       </div>
