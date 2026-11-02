@@ -24,7 +24,7 @@ onMounted(async () => {
 <template>
   <main class="tasks-page">
     <h1>Pending Tasks</h1>
-    <p v-if="taskStore.isLoading">Loading tasks...</p>
+    <p v-if="taskStore.listLoading">Loading tasks...</p>
     <TaskList
       v-else
       :title="'Pending Tasks'"
