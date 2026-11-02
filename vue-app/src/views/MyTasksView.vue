@@ -30,10 +30,10 @@ watch(
 const departments: Record<number, string> = { 1: 'HR', 2: 'Sales', 3: 'Marketing' }
 const statuses = ['Pending', 'Completed', 'Rejected']
 
-const taskDetail = ref<ITaskDetail | null>(null)
+const editableTask = ref<ITaskDetail | null>(null)
 const onEditTask = async (taskId: number) => {
   await taskStore.loadTask(taskId)
-  taskDetail.value = {
+  editableTask.value = {
     id: taskStore.PlayableTask?.id ?? -1,
     title: taskStore.PlayableTask?.title ?? '',
     description: taskStore.PlayableTask?.description ?? '',
@@ -42,6 +42,19 @@ const onEditTask = async (taskId: number) => {
     status: taskStore.PlayableTask?.status ?? -1,
   }
   taskStore.openEditModal()
+}
+
+const creatableTask = ref<ITaskDetail | null>(null)
+const onCreateTask = () => {
+  creatableTask.value = {
+    id: -1,
+    title: '',
+    description: '',
+    user: '',
+    assignedDepartment: -1,
+    status: -1,
+  }
+  taskStore.openCreateModal()
 }
 
 const onDeleteTask = async (taskId: number) => {
@@ -54,7 +67,7 @@ const onDeleteTask = async (taskId: number) => {
   <main class="tasks-page">
     <div class="flex justify-between items-center">
       <h1>My Tasks</h1>
-      <button class="primary" @click="taskStore.openCreateModal()">Create Task</button>
+      <button class="primary" @click="onCreateTask">Create Task</button>
     </div>
     <p v-if="taskStore.listLoading">Loading tasks...</p>
     <TaskList
@@ -74,11 +87,11 @@ const onDeleteTask = async (taskId: number) => {
         <DialogPanel class="dialog-panel">
           <DialogTitle class="dialog-title">Edit Task</DialogTitle>
 
-          <div class="dialog-form" v-if="taskDetail != null">
+          <div class="dialog-form" v-if="editableTask != null">
             <label class="dialog-field">
               <span>Title</span>
               <input
-                v-model="taskDetail.title"
+                v-model="editableTask.title"
                 type="text"
                 placeholder="Enter task title"
                 required
@@ -87,18 +100,18 @@ const onDeleteTask = async (taskId: number) => {
             <label class="dialog-field">
               <span>Description</span>
               <textarea
-                v-model="taskDetail.description"
+                v-model="editableTask.description"
                 placeholder="Enter task description"
                 required
               ></textarea>
             </label>
             <label class="dialog-field">
               <span>Requested by</span>
-              <input v-model="taskDetail.user" type="text" disabled />
+              <input v-model="editableTask.user" type="text" disabled />
             </label>
             <label class="dialog-field">
               <span>Department</span>
-              <select v-model="taskDetail.assignedDepartment" disabled>
+              <select v-model="editableTask.assignedDepartment" disabled>
                 <option v-for="(name, id) in departments" :key="id" :value="Number(id)">
                   {{ name }}
                 </option>
@@ -106,7 +119,7 @@ const onDeleteTask = async (taskId: number) => {
             </label>
             <label class="dialog-field">
               <span>Status</span>
-              <select v-model="taskDetail.status" disabled>
+              <select v-model="editableTask.status" disabled>
                 <option v-for="(name, id) in statuses" :key="id" :value="id">{{ name }}</option>
               </select>
             </label>
@@ -114,7 +127,7 @@ const onDeleteTask = async (taskId: number) => {
 
           <div class="dialog-actions">
             <button @click="taskStore.closeEditModal()">Cancel</button>
-            <button class="primary" @click="taskStore.editTask(taskDetail!)">Save</button>
+            <button class="primary" @click="taskStore.editTask(editableTask!)">Save</button>
           </div>
         </DialogPanel>
       </div>
@@ -131,7 +144,7 @@ const onDeleteTask = async (taskId: number) => {
           <DialogTitle class="dialog-title">Delete Task</DialogTitle>
 
           <p class="dialog-body">
-            Are you sure you want to delete this task? This action cannot be undone.
+            Are you sure you want to delete "{{ taskStore.PlayableTask?.title ?? 'this' }}" task?
           </p>
 
           <div class="dialog-actions">
@@ -154,11 +167,37 @@ const onDeleteTask = async (taskId: number) => {
         <DialogPanel class="dialog-panel">
           <DialogTitle class="dialog-title">Create Task</DialogTitle>
 
-          <p class="dialog-body">Fill in the details for the new task and save it.</p>
+          <div class="dialog-form" v-if="creatableTask != null">
+            <label class="dialog-field">
+              <span>Title</span>
+              <input
+                v-model="creatableTask.title"
+                type="text"
+                placeholder="Enter task title"
+                required
+              />
+            </label>
+            <label class="dialog-field">
+              <span>Description</span>
+              <textarea
+                v-model="creatableTask.description"
+                placeholder="Enter task description"
+                required
+              ></textarea>
+            </label>
+            <label class="dialog-field">
+              <span>Department</span>
+              <select v-model="creatableTask.assignedDepartment">
+                <option v-for="(name, id) in departments" :key="id" :value="Number(id)">
+                  {{ name }}
+                </option>
+              </select>
+            </label>
+          </div>
 
           <div class="dialog-actions">
             <button @click="taskStore.closeCreateModal()">Cancel</button>
-            <button class="primary" @click="taskStore.closeCreateModal()">Create</button>
+            <button class="primary" @click="taskStore.createTask(creatableTask!)">Create</button>
           </div>
         </DialogPanel>
       </div>

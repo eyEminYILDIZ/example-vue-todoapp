@@ -2,8 +2,10 @@ import { ApiDefinition } from '@/apidef/auth-apidef'
 import type { ITaskDetail } from '@/types'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useToastStore } from '@/stores/ToastStore'
 
 export const useTaskStore = defineStore('task', () => {
+  const toastStore = useToastStore()
 
   const AllTasks = ref<ApiDefinition.GetAllTasks.IResponse>([])
   const MyTasks = ref<ApiDefinition.GetMyTasks.IResponse>([])
@@ -195,8 +197,35 @@ const createModalOpen = ref(false)
     }
   }
 
-  const createTask = async(taskData: ApiDefinition.CreateTask.IRequest)=>{
-    const request : ApiDefinition.CreateTask.IRequest = taskData
+  const editTask = async(taskData: ITaskDetail)=>{
+    const request : ApiDefinition.UpdateTask.IRequest = {
+      taskId: taskData.id,
+      title: taskData.title,
+      description: taskData.description,
+    }
+    detailLoading.value = true
+    try {
+      await ApiDefinition.UpdateTask.Request(request)
+      throw new Error("testsetseete")
+      toastStore.success('Task updated', `"${taskData.title}" was saved successfully.`)
+
+      await loadMyTasks()
+    } catch (error) {
+      console.error('Failed to update task', error)
+      toastStore.error('Could not update task', typeof error === 'string' ? error : undefined)
+      throw error
+    } finally {
+      detailLoading.value = false
+      closeEditModal()
+    }
+  }
+
+  const createTask = async(taskData: ITaskDetail)=>{
+    const request : ApiDefinition.CreateTask.IRequest = {
+      title: taskData.title,
+      description: taskData.description,
+      assignedDepartment: taskData.assignedDepartment
+    }
     detailLoading.value = true
     try {
       await ApiDefinition.CreateTask.Request(request)
@@ -208,26 +237,6 @@ const createModalOpen = ref(false)
     } finally {
       detailLoading.value = false
       closeCreateModal()
-    }
-  }
-
-  const editTask = async(taskData: ITaskDetail)=>{
-    const request : ApiDefinition.UpdateTask.IRequest = {
-      taskId: taskData.id,
-      title: taskData.title,
-      description: taskData.description,
-    }
-    detailLoading.value = true
-    try {
-      await ApiDefinition.UpdateTask.Request(request)
-
-      await loadMyTasks()
-    } catch (error) {
-      console.error('Failed to update task', error)
-      throw error
-    } finally {
-      detailLoading.value = false
-      closeEditModal()
     }
   }
 
