@@ -4,5 +4,7 @@
             "approve": true,
             "matchCommandLine": true
         }
-    }
+    },
+    "oxc.enable.oxlint": false,
+    "oxc.enable.oxfmt": false
 }
