@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/AuthStore'
 import { ref } from 'vue'
 
 const authStore = useAuthStore()
-const email = ref('')
+const email = ref('mary@company.com')
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/TaskStore'
 import { onMounted, ref } from 'vue'
-import { Dialog, DialogPanel, DialogTitle, DialogDescription } from '@headlessui/vue'
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 import type { ITaskRow } from '@/types'
 import TaskList from '@/components/TaskList.vue'
 
@@ -34,8 +34,6 @@ const onDeleteTask = async (taskId: number) => {
 <template>
   <main class="tasks-page">
     <h1>My Tasks</h1>
-    <p v-if="taskStore.editModalOpen">Editing task...</p>
-    <p v-if="taskStore.deleteModalOpen">Deleting task...</p>
     <p v-if="taskStore.listLoading">Loading tasks...</p>
     <TaskList
       v-else
@@ -49,15 +47,12 @@ const onDeleteTask = async (taskId: number) => {
     />
     <br />
     <br />
-    <!-- EDIT -->
+    <!-- EDIT MODAL -->
     <Dialog class="dialog-root" :open="taskStore.editModalOpen" @close="taskStore.closeEditModal">
       <div class="dialog-backdrop" aria-hidden="true" />
       <div class="dialog-container">
         <DialogPanel class="dialog-panel">
           <DialogTitle class="dialog-title">Edit Task</DialogTitle>
-          <DialogDescription class="dialog-description">
-            This will allow you to edit the selected task
-          </DialogDescription>
 
           <p class="dialog-body">
             Are you sure you want to edit this task? Make the necessary changes and save them.
@@ -66,6 +61,28 @@ const onDeleteTask = async (taskId: number) => {
           <div class="dialog-actions">
             <button @click="taskStore.closeEditModal()">Cancel</button>
             <button class="primary" @click="taskStore.closeEditModal()">Save</button>
+          </div>
+        </DialogPanel>
+      </div>
+    </Dialog>
+    <!-- DELETE MODAL -->
+    <Dialog
+      class="dialog-root"
+      :open="taskStore.deleteModalOpen"
+      @close="taskStore.closeDeleteModal"
+    >
+      <div class="dialog-backdrop" aria-hidden="true" />
+      <div class="dialog-container">
+        <DialogPanel class="dialog-panel">
+          <DialogTitle class="dialog-title">Delete Task</DialogTitle>
+
+          <p class="dialog-body">
+            Are you sure you want to delete this task? This action cannot be undone.
+          </p>
+
+          <div class="dialog-actions">
+            <button @click="taskStore.closeDeleteModal()">Cancel</button>
+            <button class="primary" @click="taskStore.closeDeleteModal()">Delete</button>
           </div>
         </DialogPanel>
       </div>

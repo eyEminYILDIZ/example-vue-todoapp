@@ -9,7 +9,7 @@ A department task-tracking app (users create tasks for other departments, and th
 | Folder | What | Stack | Port |
 | --- | --- | --- | --- |
 | `api/` | Backend REST API | Node.js, Express, JWT | `5000` |
-| `vue-app/` | Frontend web app | Vue 3, Vite, TypeScript, Pinia, Vue Router, Tailwind CSS 4, axios | `5173` |
+| `vue-app/` | Frontend web app | Vue 3, Vite, TypeScript, Pinia, Vue Router, Tailwind CSS 4, axios | `3000` |
 
 - The API has no database. Data lives in memory and is reset on every API start, so changes are temporary. `GET /api/task/reset-data` also resets it.
 - Login is by email only (no password). Test user: `mary@company.com` (Mary Glenn, HR Specialist, department 1).
@@ -41,7 +41,7 @@ npm run dev          # nodemon, port 5000
 
 # vue-app/
 npm install
-npm run dev          # vite, port 5173
+npm run dev          # vite, port 3000
 npm run type-check
 npm run lint
 npm run test:unit
@@ -57,17 +57,17 @@ Use this whenever asked to "check the app", "test the UI" and similar. Use the C
 The developer usually has both running already, so the ports are normally taken. Check first:
 
 ```sh
-ss -ltn | grep -E ':(5000|5173)\b'
+ss -ltn | grep -E ':(5000|3000)\b'
 ```
 
 - Port `5000` listening: the API is running. Do not start it.
-- Port `5173` listening: the web app is running. Do not start it.
+- Port `3000` listening: the web app is running. Do not start it.
 - Only if a port is free, start that one (in the background) from its folder with `npm run dev`, and wait until it listens. Tell the user what you started, and stop what you started when done.
 - Never kill or restart a process the developer started, and never start a second instance on another port.
 
 ### 2. Open the app and log in
 
-1. Call `tabs_context_mcp`, then open a new tab and go to `http://localhost:5173`.
+1. Call `tabs_context_mcp`, then open a new tab and go to `http://localhost:3000`.
 2. If redirected to `/login`, log in as `mary@company.com` (email only, no password needed).
 3. If the app opens already logged in, check the header shows Mary Glenn. Otherwise log out and log in again.
 
