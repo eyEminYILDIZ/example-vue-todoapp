@@ -23,13 +23,56 @@ watch(
     }))
   },
 )
+
+const onDetailTask = async (taskId: number) => {
+  await taskStore.loadTask(taskId)
+  taskStore.openDetailModal()
+}
 </script>
 
 <template>
   <main class="tasks-page">
     <h1>All Tasks</h1>
     <p v-if="taskStore.listLoading">Loading tasks...</p>
-    <TaskList v-else :title="'All Tasks'" :tasks="tasks" />
+    <TaskList
+      v-else
+      :title="'All Tasks'"
+      :tasks="tasks"
+      :detail-allowed="true"
+      @on-detail="onDetailTask"
+    />
+    <!-- DETAIL MODAL -->
+    <Dialog
+      class="dialog-root"
+      :open="taskStore.detailModalOpen"
+      @close="taskStore.closeDetailModal"
+    >
+      <div class="dialog-backdrop" aria-hidden="true" />
+      <div class="dialog-container">
+        <DialogPanel class="dialog-panel">
+          <DialogTitle class="dialog-title">Task Details</DialogTitle>
+
+          <p class="dialog-body"><strong>Title:</strong> {{ taskStore.PlayableTask?.title }}</p>
+          <p class="dialog-body">
+            <strong>Description:</strong> {{ taskStore.PlayableTask?.description }}
+          </p>
+          <p class="dialog-body">
+            <strong>Requested by:</strong> {{ taskStore.PlayableTask?.user?.name }}
+          </p>
+          <p class="dialog-body">
+            <strong>Department:</strong> {{ taskStore.PlayableTask?.assignedDepartment }}
+          </p>
+          <p class="dialog-body">
+            <strong>Status:</strong>
+            {{ ['Pending', 'Completed', 'Rejected'][taskStore.PlayableTask?.status] ?? 'Unknown' }}
+          </p>
+
+          <div class="dialog-actions">
+            <button @click="taskStore.closeDetailModal()">Close</button>
+          </div>
+        </DialogPanel>
+      </div>
+    </Dialog>
   </main>
 </template>
 

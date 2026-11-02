@@ -4,6 +4,7 @@ import type { ITaskRow } from '@/types'
 const props = defineProps<{
   title: string
   tasks: ITaskRow[]
+  detailAllowed?: boolean
   editAllowed?: boolean
   deleteAllowed?: boolean
   createAllowed?: boolean
@@ -11,7 +12,7 @@ const props = defineProps<{
   rejectAllowed?: boolean
 }>()
 
-const emit = defineEmits(['onEdit', 'onDelete', 'onComplete', 'onReject'])
+const emit = defineEmits(['onEdit', 'onDelete', 'onComplete', 'onReject', 'onDetail'])
 
 const onEdit = (id: number) => {
   emit('onEdit', id)
@@ -25,6 +26,9 @@ const onComplete = (id: number) => {
 const onReject = (id: number) => {
   emit('onReject', id)
 }
+const onDetail = (id: number) => {
+  emit('onDetail', id)
+}
 </script>
 
 <template>
@@ -34,7 +38,11 @@ const onReject = (id: number) => {
       <tr>
         <th
           v-if="
-            props.editAllowed || props.deleteAllowed || props.completeAllowed || props.rejectAllowed
+            props.detailAllowed ||
+            props.editAllowed ||
+            props.deleteAllowed ||
+            props.completeAllowed ||
+            props.rejectAllowed
           "
         >
           Actions
@@ -52,9 +60,14 @@ const onReject = (id: number) => {
         <td
           class="flex gap-1"
           v-if="
-            props.editAllowed || props.deleteAllowed || props.completeAllowed || props.rejectAllowed
+            props.detailAllowed ||
+            props.editAllowed ||
+            props.deleteAllowed ||
+            props.completeAllowed ||
+            props.rejectAllowed
           "
         >
+          <button @click="onDetail(task.id)" v-if="props.detailAllowed">Detail</button>
           <button @click="onEdit(task.id)" v-if="props.editAllowed">Edit</button>
           <button @click="onDelete(task.id)" v-if="props.deleteAllowed">Delete</button>
           <button @click="onComplete(task.id)" v-if="props.completeAllowed">Complete</button>

@@ -21,6 +21,14 @@ const createModalOpen = ref(false)
     createModalOpen.value = false
   }
 
+  const detailModalOpen = ref(false)
+  const openDetailModal = () => {
+    detailModalOpen.value = true
+  }
+  const closeDetailModal = () => {
+    detailModalOpen.value = false
+  }
+
   const editModalOpen = ref(false)
   const openEditModal = () => {
     editModalOpen.value = true
@@ -205,11 +213,14 @@ const createModalOpen = ref(false)
     deleteTask,
     completeTask,
     rejectTask,
+    openDetailModal,
+    closeDetailModal,
     resetLoading,
     editModalOpen,
     deleteModalOpen,
     completeModalOpen,
     rejectModalOpen,
+    detailModalOpen,
     createModalOpen,
     AllTasks,
     listLoading,
