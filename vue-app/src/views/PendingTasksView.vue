@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/TaskStore'
 import { onMounted } from 'vue'
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 import type { ITaskRow } from '@/types'
 import { ref } from 'vue'
 import TaskList from '@/components/TaskList.vue'
@@ -19,6 +20,16 @@ onMounted(async () => {
     status: task.status,
   }))
 })
+
+const onApproveTask = async (taskId: number) => {
+  await taskStore.loadTask(taskId)
+  taskStore.openApproveModal()
+}
+
+const onRejectTask = async (taskId: number) => {
+  await taskStore.loadTask(taskId)
+  taskStore.openRejectModal()
+}
 </script>
 
 <template>
@@ -31,7 +42,51 @@ onMounted(async () => {
       :tasks="tasks"
       :approve-allowed="true"
       :reject-allowed="true"
+      v-on:on-approve="onApproveTask"
+      v-on:on-reject="onRejectTask"
     />
+    <!-- APPROVE MODAL -->
+    <Dialog
+      class="dialog-root"
+      :open="taskStore.approveModalOpen"
+      @close="taskStore.closeApproveModal"
+    >
+      <div class="dialog-backdrop" aria-hidden="true" />
+      <div class="dialog-container">
+        <DialogPanel class="dialog-panel">
+          <DialogTitle class="dialog-title">Approve Task</DialogTitle>
+
+          <p class="dialog-body">Are you sure you want to approve this task?</p>
+
+          <div class="dialog-actions">
+            <button @click="taskStore.closeApproveModal()">Cancel</button>
+            <button class="primary" @click="taskStore.closeApproveModal()">Approve</button>
+          </div>
+        </DialogPanel>
+      </div>
+    </Dialog>
+    <!-- REJECT MODAL -->
+    <Dialog
+      class="dialog-root"
+      :open="taskStore.rejectModalOpen"
+      @close="taskStore.closeRejectModal"
+    >
+      <div class="dialog-backdrop" aria-hidden="true" />
+      <div class="dialog-container">
+        <DialogPanel class="dialog-panel">
+          <DialogTitle class="dialog-title">Reject Task</DialogTitle>
+
+          <p class="dialog-body">
+            Are you sure you want to reject this task? This action cannot be undone.
+          </p>
+
+          <div class="dialog-actions">
+            <button @click="taskStore.closeRejectModal()">Cancel</button>
+            <button class="primary" @click="taskStore.closeRejectModal()">Reject</button>
+          </div>
+        </DialogPanel>
+      </div>
+    </Dialog>
   </main>
 </template>
 
