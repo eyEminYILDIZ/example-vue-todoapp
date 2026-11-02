@@ -33,7 +33,10 @@ const onDeleteTask = async (taskId: number) => {
 
 <template>
   <main class="tasks-page">
-    <h1>My Tasks</h1>
+    <div class="flex justify-between items-center">
+      <h1>My Tasks</h1>
+      <button class="primary" @click="taskStore.openCreateModal()">Create Task</button>
+    </div>
     <p v-if="taskStore.listLoading">Loading tasks...</p>
     <TaskList
       v-else
@@ -42,8 +45,8 @@ const onDeleteTask = async (taskId: number) => {
       :create-allowed="true"
       :edit-allowed="true"
       :delete-allowed="true"
-      v-on:on-edit="onEditTask"
-      v-on:on-delete="onDeleteTask"
+      @on-edit="onEditTask"
+      @on-delete="onDeleteTask"
     />
     <br />
     <br />
@@ -83,6 +86,26 @@ const onDeleteTask = async (taskId: number) => {
           <div class="dialog-actions">
             <button @click="taskStore.closeDeleteModal()">Cancel</button>
             <button class="primary" @click="taskStore.closeDeleteModal()">Delete</button>
+          </div>
+        </DialogPanel>
+      </div>
+    </Dialog>
+    <!-- CREATE MODAL -->
+    <Dialog
+      class="dialog-root"
+      :open="taskStore.createModalOpen"
+      @close="taskStore.closeCreateModal"
+    >
+      <div class="dialog-backdrop" aria-hidden="true" />
+      <div class="dialog-container">
+        <DialogPanel class="dialog-panel">
+          <DialogTitle class="dialog-title">Create Task</DialogTitle>
+
+          <p class="dialog-body">Fill in the details for the new task and save it.</p>
+
+          <div class="dialog-actions">
+            <button @click="taskStore.closeCreateModal()">Cancel</button>
+            <button class="primary" @click="taskStore.closeCreateModal()">Create</button>
           </div>
         </DialogPanel>
       </div>

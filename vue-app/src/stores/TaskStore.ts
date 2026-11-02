@@ -12,6 +12,14 @@ export const useTaskStore = defineStore('task', () => {
 
   const PlayableTask = ref<ApiDefinition.GetTask.IResponse | null>(null)
 
+const createModalOpen = ref(false)
+  const openCreateModal = () => {
+    createModalOpen.value = true
+  }
+  const closeCreateModal = () => {
+    createModalOpen.value = false
+  }
+
   const editModalOpen = ref(false)
   const openEditModal = () => {
     editModalOpen.value = true
@@ -19,6 +27,7 @@ export const useTaskStore = defineStore('task', () => {
   const closeEditModal = () => {
     editModalOpen.value = false
   }
+
 
   const deleteModalOpen = ref(false)
   const openDeleteModal = () => {
@@ -118,10 +127,13 @@ export const useTaskStore = defineStore('task', () => {
     closeApproveModal,
     openRejectModal,
     closeRejectModal,
+    openCreateModal,
+    closeCreateModal,
     editModalOpen,
     deleteModalOpen,
     approveModalOpen,
     rejectModalOpen,
+    createModalOpen,
     AllTasks,
     listLoading,
     detailLoading,

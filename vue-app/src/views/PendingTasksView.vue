@@ -42,8 +42,8 @@ const onRejectTask = async (taskId: number) => {
       :tasks="tasks"
       :approve-allowed="true"
       :reject-allowed="true"
-      v-on:on-approve="onApproveTask"
-      v-on:on-reject="onRejectTask"
+      @on-approve="onApproveTask"
+      @on-reject="onRejectTask"
     />
     <!-- APPROVE MODAL -->
     <Dialog
