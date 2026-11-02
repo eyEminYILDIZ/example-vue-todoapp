@@ -2,9 +2,11 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { ApiDefinition } from '@/apidef/auth-apidef'
 import type { ICurrentUser } from '@/types'
+import { toErrorMessage, useToastStore } from '@/stores/ToastStore'
 const STORAGE_KEY = 'CurrentUser'
 
 export const useAuthStore = defineStore('auth', () => {
+  const toastStore = useToastStore()
 
   const loadCurrentUser = (): ICurrentUser | null => {
     try {
@@ -51,10 +53,12 @@ export const useAuthStore = defineStore('auth', () => {
         department: response.department,
         jwtToken: response.jwtToken
       })
+      toastStore.showAfterReload('success', 'Logged in', `Welcome back, ${response.name}.`)
       window.location.href = "/"
     } catch (error) {
       console.error('Login failed', error)
       errorText.value = 'Login failed. Check your email and try again.'
+      toastStore.error('Login failed', toErrorMessage(error) ?? errorText.value)
       throw error
     } finally {
       isLoading.value = false
@@ -63,6 +67,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const logout = () => {
     removeCurrentUser()
+    toastStore.showAfterReload('info', 'Logged out', 'You have been signed out.')
     window.location.href = "/"
   }
 

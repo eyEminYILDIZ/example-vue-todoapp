@@ -2,7 +2,7 @@ import { ApiDefinition } from '@/apidef/auth-apidef'
 import type { ITaskDetail } from '@/types'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { useToastStore } from '@/stores/ToastStore'
+import { toErrorMessage, useToastStore } from '@/stores/ToastStore'
 
 export const useTaskStore = defineStore('task', () => {
   const toastStore = useToastStore()
@@ -73,9 +73,11 @@ const createModalOpen = ref(false)
     resetLoading.value = true
     try {
       await ApiDefinition.ResetData.Request(request)
+      toastStore.showAfterReload('success', 'Data reset', 'Task data was restored to its defaults.')
       window.location.reload()
     } catch (error) {
       console.error('Failed to reset data', error)
+      toastStore.error('Could not reset data', toErrorMessage(error))
       throw error
     } finally {
       resetLoading.value = false
@@ -92,6 +94,7 @@ const createModalOpen = ref(false)
       AllTasks.value = await ApiDefinition.GetAllTasks.Request(request)
     } catch (error) {
       console.error('Failed to load all tasks', error)
+      toastStore.error('Could not load tasks', toErrorMessage(error))
       throw error
     } finally {
       listLoading.value = false
@@ -107,6 +110,7 @@ const createModalOpen = ref(false)
       MyTasks.value = await ApiDefinition.GetMyTasks.Request(request)
     } catch (error) {
       console.error('Failed to load my tasks', error)
+      toastStore.error('Could not load your tasks', toErrorMessage(error))
       throw error
     } finally {
       listLoading.value = false
@@ -122,6 +126,7 @@ const createModalOpen = ref(false)
       PendingTasks.value = await ApiDefinition.GetPendingTasks.Request(request)
     } catch (error) {
       console.error('Failed to load pending tasks', error)
+      toastStore.error('Could not load pending tasks', toErrorMessage(error))
       throw error
     } finally {
       listLoading.value = false
@@ -137,6 +142,7 @@ const createModalOpen = ref(false)
       PlayableTask.value = await ApiDefinition.GetTask.Request(request)
     } catch (error) {
       console.error('Failed to load playable task', error)
+      toastStore.error('Could not load task', toErrorMessage(error))
       throw error
     } finally {
       detailLoading.value = false
@@ -150,10 +156,12 @@ const createModalOpen = ref(false)
     detailLoading.value = true
     try {
       await ApiDefinition.DeleteTask.Request(request)
+      toastStore.success('Task deleted', `"${PlayableTask.value?.title ?? 'The task'}" was deleted.`)
 
       await loadMyTasks()
     } catch (error) {
       console.error('Failed to delete task', error)
+      toastStore.error('Could not delete task', toErrorMessage(error))
       throw error
     } finally {
       detailLoading.value = false
@@ -168,10 +176,12 @@ const createModalOpen = ref(false)
     detailLoading.value = true
     try {
       await ApiDefinition.CompleteTask.Request(request)
+      toastStore.success('Task completed', `"${PlayableTask.value?.title ?? 'The task'}" was marked as completed.`)
 
       await loadPendingTasks()
     } catch (error) {
       console.error('Failed to complete task', error)
+      toastStore.error('Could not complete task', toErrorMessage(error))
       throw error
     } finally {
       detailLoading.value = false
@@ -186,10 +196,12 @@ const createModalOpen = ref(false)
     detailLoading.value = true
     try {
       await ApiDefinition.RejectTask.Request(request)
+      toastStore.success('Task rejected', `"${PlayableTask.value?.title ?? 'The task'}" was rejected.`)
 
       await loadPendingTasks()
     } catch (error) {
       console.error('Failed to reject task', error)
+      toastStore.error('Could not reject task', toErrorMessage(error))
       throw error
     } finally {
       detailLoading.value = false
@@ -206,13 +218,12 @@ const createModalOpen = ref(false)
     detailLoading.value = true
     try {
       await ApiDefinition.UpdateTask.Request(request)
-      throw new Error("testsetseete")
       toastStore.success('Task updated', `"${taskData.title}" was saved successfully.`)
 
       await loadMyTasks()
     } catch (error) {
       console.error('Failed to update task', error)
-      toastStore.error('Could not update task', typeof error === 'string' ? error : undefined)
+      toastStore.error('Could not update task', toErrorMessage(error))
       throw error
     } finally {
       detailLoading.value = false
@@ -229,10 +240,12 @@ const createModalOpen = ref(false)
     detailLoading.value = true
     try {
       await ApiDefinition.CreateTask.Request(request)
+      toastStore.success('Task created', `"${taskData.title}" was created successfully.`)
 
       await loadMyTasks()
     } catch (error) {
       console.error('Failed to create task', error)
+      toastStore.error('Could not create task', toErrorMessage(error))
       throw error
     } finally {
       detailLoading.value = false

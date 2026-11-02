@@ -13,6 +13,10 @@ export interface IToast {
 }
 
 const DEFAULT_DURATION_MS = 4000
+const PENDING_KEY = 'PendingToast'
+
+// ApiService rejects with a plain message string
+export const toErrorMessage = (error: unknown) => (typeof error === 'string' ? error : undefined)
 
 export const useToastStore = defineStore('toast', () => {
   const toasts = ref<IToast[]>([])
@@ -39,5 +43,25 @@ export const useToastStore = defineStore('toast', () => {
   const error = (title: string, message?: string) => show('error', title, message, 6000)
   const info = (title: string, message?: string) => show('info', title, message)
 
-  return { toasts, show, success, error, info, dismiss, remove }
+  // for flows that reload the page (login, logout, reset data): shown once the app is back up
+  const showAfterReload = (type: ToastType, title: string, message?: string) => {
+    try {
+      sessionStorage.setItem(PENDING_KEY, JSON.stringify({ type, title, message }))
+    } catch {
+      // storage unavailable, the toast is just skipped
+    }
+  }
+
+  try {
+    const raw = sessionStorage.getItem(PENDING_KEY)
+    if (raw) {
+      sessionStorage.removeItem(PENDING_KEY)
+      const pending = JSON.parse(raw) as Pick<IToast, 'type' | 'title' | 'message'>
+      show(pending.type, pending.title, pending.message)
+    }
+  } catch {
+    // ignore a broken or unavailable pending toast
+  }
+
+  return { toasts, show, success, error, info, dismiss, remove, showAfterReload }
 })
