@@ -9,6 +9,7 @@ export const useTaskStore = defineStore('task', () => {
   const PendingTasks = ref<ApiDefinition.GetPendingTasks.IResponse>([])
   const listLoading = ref(false)
   const detailLoading = ref(false)
+  const resetLoading = ref(false)
 
   const PlayableTask = ref<ApiDefinition.GetTask.IResponse | null>(null)
 
@@ -53,6 +54,22 @@ const createModalOpen = ref(false)
     rejectModalOpen.value = false
   }
   ////////////////////////////////////////////////////////////////////
+
+  const resetAPI = async()=>{
+    const request : ApiDefinition.ResetData.IRequest = {
+      empty: "true"
+    }
+    resetLoading.value = true
+    try {
+      await ApiDefinition.ResetData.Request(request)
+    } catch (error) {
+      console.error('Failed to reset data', error)
+      throw error
+    } finally {
+      resetLoading.value = false
+    }
+  }
+
 
   const loadAllTasks = async()=>{
     const request : ApiDefinition.GetAllTasks.IRequest = {
@@ -115,6 +132,7 @@ const createModalOpen = ref(false)
   }
 
   return {
+    resetAPI,
     loadAllTasks,
     loadMyTasks,
     loadPendingTasks,
@@ -129,6 +147,7 @@ const createModalOpen = ref(false)
     closeRejectModal,
     openCreateModal,
     closeCreateModal,
+    resetLoading,
     editModalOpen,
     deleteModalOpen,
     approveModalOpen,

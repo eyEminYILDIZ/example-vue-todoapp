@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/AuthStore'
+import { useTaskStore } from '@/stores/TaskStore'
 
 const authStore = useAuthStore()
+const taskStore = useTaskStore()
 </script>
 
 <template>
@@ -12,6 +14,11 @@ const authStore = useAuthStore()
         <RouterLink to="/all-tasks" active-class="active">All Tasks</RouterLink>
         <RouterLink to="/my-tasks" active-class="active">My Tasks</RouterLink>
         <RouterLink to="/pending-tasks" active-class="active">Pending Tasks</RouterLink>
+      </div>
+      <div>
+        <button :disabled="taskStore.resetLoading" class="" @click="taskStore.resetAPI()">
+          Reset Data
+        </button>
       </div>
       <div class="nav-user">
         <span>{{ authStore.currentUser?.name }} ({{ authStore.currentUser?.email }})</span>
