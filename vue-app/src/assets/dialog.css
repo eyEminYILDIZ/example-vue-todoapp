@@ -1,0 +1,27 @@
+/* Shared Headless UI dialog styles. Use these classes on every dialog so they all look the same. */
+@layer components {
+  .dialog-root {
+    @apply relative z-50;
+  }
+  .dialog-backdrop {
+    @apply fixed inset-0 bg-black/40;
+  }
+  .dialog-container {
+    @apply fixed inset-0 flex items-center justify-center p-4;
+  }
+  .dialog-panel {
+    @apply w-full max-w-md rounded-xl border border-(--border) bg-(--surface) p-6 shadow-xl;
+  }
+  .dialog-title {
+    @apply text-lg font-semibold;
+  }
+  .dialog-description {
+    @apply mt-1 text-sm text-(--muted);
+  }
+  .dialog-body {
+    @apply mt-4 text-sm;
+  }
+  .dialog-actions {
+    @apply mt-6 flex justify-end gap-2;
+  }
+}

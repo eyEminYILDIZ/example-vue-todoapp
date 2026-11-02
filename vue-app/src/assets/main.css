@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./dialog.css";
 
 :root {
   color-scheme: light;
