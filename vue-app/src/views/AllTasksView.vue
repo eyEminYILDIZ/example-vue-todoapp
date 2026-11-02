@@ -2,6 +2,7 @@
 import { useTaskStore } from '@/stores/TaskStore'
 import { onMounted, ref, watch } from 'vue'
 import TaskList from '@/components/TaskList.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import type { ITaskRow, ITaskDetail } from '@/types'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 
@@ -47,9 +48,9 @@ const onDetailTask = async (taskId: number) => {
 <template>
   <main class="tasks-page">
     <h1>All Tasks</h1>
-    <p v-if="taskStore.listLoading">Loading tasks...</p>
+    <LoadingSpinner :show="taskStore.listLoading" label="Loading tasks..." />
     <TaskList
-      v-else
+      v-if="!taskStore.listLoading"
       :title="'All Tasks'"
       :tasks="tasks"
       :detail-allowed="true"

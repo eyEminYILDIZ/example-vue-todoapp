@@ -5,6 +5,7 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 import type { ITaskRow } from '@/types'
 import { ref } from 'vue'
 import TaskList from '@/components/TaskList.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const taskStore = useTaskStore()
 const tasks = ref<ITaskRow[]>([])
@@ -41,9 +42,9 @@ const onRejectTask = async (taskId: number) => {
 <template>
   <main class="tasks-page">
     <h1>Pending Tasks</h1>
-    <p v-if="taskStore.listLoading">Loading tasks...</p>
+    <LoadingSpinner :show="taskStore.listLoading" label="Loading tasks..." />
     <TaskList
-      v-else
+      v-if="!taskStore.listLoading"
       :title="'Pending Tasks'"
       :tasks="tasks"
       :complete-allowed="true"

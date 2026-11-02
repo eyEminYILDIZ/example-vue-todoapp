@@ -5,6 +5,7 @@ import type { ITaskDetail } from '@/types'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 import type { ITaskRow } from '@/types'
 import TaskList from '@/components/TaskList.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const taskStore = useTaskStore()
 const tasks = ref<ITaskRow[]>([])
@@ -69,9 +70,9 @@ const onDeleteTask = async (taskId: number) => {
       <h1>My Tasks</h1>
       <button class="primary" @click="onCreateTask">Create Task</button>
     </div>
-    <p v-if="taskStore.listLoading">Loading tasks...</p>
+    <LoadingSpinner :show="taskStore.listLoading" label="Loading tasks..." />
     <TaskList
-      v-else
+      v-if="!taskStore.listLoading"
       :title="'My Tasks'"
       :tasks="tasks"
       :create-allowed="true"
