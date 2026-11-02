@@ -38,12 +38,12 @@ const createModalOpen = ref(false)
     deleteModalOpen.value = false
   }
 
-  const approveModalOpen = ref(false)
-  const openApproveModal = () => {
-    approveModalOpen.value = true
+  const completeModalOpen = ref(false)
+  const openCompleteModal = () => {
+    completeModalOpen.value = true
   }
-  const closeApproveModal = () => {
-    approveModalOpen.value = false
+  const closeCompleteModal = () => {
+    completeModalOpen.value = false
   }
 
   const rejectModalOpen = ref(false)
@@ -150,7 +150,7 @@ const createModalOpen = ref(false)
     }
   }
 
-  const approveTask = async(taskId: number)=>{
+  const completeTask = async(taskId: number)=>{
     const request : ApiDefinition.CompleteTask.IRequest = {
       taskId
     }
@@ -160,11 +160,11 @@ const createModalOpen = ref(false)
 
       await loadPendingTasks()
     } catch (error) {
-      console.error('Failed to approve task', error)
+      console.error('Failed to complete task', error)
       throw error
     } finally {
       detailLoading.value = false
-      closeApproveModal()
+      closeCompleteModal()
     }
   }
 
@@ -196,19 +196,19 @@ const createModalOpen = ref(false)
     closeEditModal,
     openDeleteModal,
     closeDeleteModal,
-    openApproveModal,
-    closeApproveModal,
+    openCompleteModal,
+    closeCompleteModal,
     openRejectModal,
     closeRejectModal,
     openCreateModal,
     closeCreateModal,
     deleteTask,
-    approveTask,
+    completeTask,
     rejectTask,
     resetLoading,
     editModalOpen,
     deleteModalOpen,
-    approveModalOpen,
+    completeModalOpen,
     rejectModalOpen,
     createModalOpen,
     AllTasks,

@@ -27,9 +27,9 @@ watch(
   },
 )
 
-const onApproveTask = async (taskId: number) => {
+const onCompleteTask = async (taskId: number) => {
   await taskStore.loadTask(taskId)
-  taskStore.openApproveModal()
+  taskStore.openCompleteModal()
 }
 
 const onRejectTask = async (taskId: number) => {
@@ -46,31 +46,31 @@ const onRejectTask = async (taskId: number) => {
       v-else
       :title="'Pending Tasks'"
       :tasks="tasks"
-      :approve-allowed="true"
+      :complete-allowed="true"
       :reject-allowed="true"
-      @on-approve="onApproveTask"
+      @on-complete="onCompleteTask"
       @on-reject="onRejectTask"
     />
-    <!-- APPROVE MODAL -->
+    <!-- COMPLETE MODAL -->
     <Dialog
       class="dialog-root"
-      :open="taskStore.approveModalOpen"
-      @close="taskStore.closeApproveModal"
+      :open="taskStore.completeModalOpen"
+      @close="taskStore.closeCompleteModal"
     >
       <div class="dialog-backdrop" aria-hidden="true" />
       <div class="dialog-container">
         <DialogPanel class="dialog-panel">
-          <DialogTitle class="dialog-title">Approve Task</DialogTitle>
+          <DialogTitle class="dialog-title">Complete Task</DialogTitle>
 
-          <p class="dialog-body">Are you sure you want to approve this task?</p>
+          <p class="dialog-body">Are you sure you want to complete this task?</p>
 
           <div class="dialog-actions">
-            <button @click="taskStore.closeApproveModal()">Cancel</button>
+            <button @click="taskStore.closeCompleteModal()">Cancel</button>
             <button
               class="primary"
-              @click="taskStore.approveTask(taskStore.PlayableTask?.id ?? -1)"
+              @click="taskStore.completeTask(taskStore.PlayableTask?.id ?? -1)"
             >
-              Approve
+              Complete
             </button>
           </div>
         </DialogPanel>

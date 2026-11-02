@@ -7,11 +7,11 @@ const props = defineProps<{
   editAllowed?: boolean
   deleteAllowed?: boolean
   createAllowed?: boolean
-  approveAllowed?: boolean
+  completeAllowed?: boolean
   rejectAllowed?: boolean
 }>()
 
-const emit = defineEmits(['onEdit', 'onDelete', 'onApprove', 'onReject'])
+const emit = defineEmits(['onEdit', 'onDelete', 'onComplete', 'onReject'])
 
 const onEdit = (id: number) => {
   emit('onEdit', id)
@@ -19,8 +19,8 @@ const onEdit = (id: number) => {
 const onDelete = (id: number) => {
   emit('onDelete', id)
 }
-const onApprove = (id: number) => {
-  emit('onApprove', id)
+const onComplete = (id: number) => {
+  emit('onComplete', id)
 }
 const onReject = (id: number) => {
   emit('onReject', id)
@@ -34,7 +34,7 @@ const onReject = (id: number) => {
       <tr>
         <th
           v-if="
-            props.editAllowed || props.deleteAllowed || props.approveAllowed || props.rejectAllowed
+            props.editAllowed || props.deleteAllowed || props.completeAllowed || props.rejectAllowed
           "
         >
           Actions
@@ -52,12 +52,12 @@ const onReject = (id: number) => {
         <td
           class="flex gap-1"
           v-if="
-            props.editAllowed || props.deleteAllowed || props.approveAllowed || props.rejectAllowed
+            props.editAllowed || props.deleteAllowed || props.completeAllowed || props.rejectAllowed
           "
         >
           <button @click="onEdit(task.id)" v-if="props.editAllowed">Edit</button>
           <button @click="onDelete(task.id)" v-if="props.deleteAllowed">Delete</button>
-          <button @click="onApprove(task.id)" v-if="props.approveAllowed">Approve</button>
+          <button @click="onComplete(task.id)" v-if="props.completeAllowed">Complete</button>
           <button @click="onReject(task.id)" v-if="props.rejectAllowed">Reject</button>
         </td>
         <td>{{ task.id }}</td>
