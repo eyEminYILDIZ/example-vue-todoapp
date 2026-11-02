@@ -7,22 +7,56 @@ export const useTaskStore = defineStore('task', () => {
   const AllTasks = ref<ApiDefinition.GetAllTasks.IResponse>([])
   const MyTasks = ref<ApiDefinition.GetMyTasks.IResponse>([])
   const PendingTasks = ref<ApiDefinition.GetPendingTasks.IResponse>([])
-  const isLoading = ref(false)
+  const listLoading = ref(false)
+  const detailLoading = ref(false)
 
+  const PlayableTask = ref<ApiDefinition.GetTask.IResponse | null>(null)
+
+  const editModalOpen = ref(false)
+  const openEditModal = () => {
+    editModalOpen.value = true
+  }
+  const closeEditModal = () => {
+    editModalOpen.value = false
+  }
+
+  const deleteModalOpen = ref(false)
+  const openDeleteModal = () => {
+    deleteModalOpen.value = true
+  }
+  const closeDeleteModal = () => {
+    deleteModalOpen.value = false
+  }
+
+  const approveModalOpen = ref(false)
+  const openApproveModal = () => {
+    approveModalOpen.value = true
+  }
+  const closeApproveModal = () => {
+    approveModalOpen.value = false
+  }
+
+  const rejectModalOpen = ref(false)
+  const openRejectModal = () => {
+    rejectModalOpen.value = true
+  }
+  const closeRejectModal = () => {
+    rejectModalOpen.value = false
+  }
   ////////////////////////////////////////////////////////////////////
 
   const loadAllTasks = async()=>{
     const request : ApiDefinition.GetAllTasks.IRequest = {
       empty: "true"
     }
-    isLoading.value = true
+    listLoading.value = true
     try {
       AllTasks.value = await ApiDefinition.GetAllTasks.Request(request)
     } catch (error) {
       console.error('Failed to load all tasks', error)
       throw error
     } finally {
-      isLoading.value = false
+      listLoading.value = false
     }
   }
 
@@ -30,14 +64,14 @@ export const useTaskStore = defineStore('task', () => {
     const request : ApiDefinition.GetMyTasks.IRequest = {
       empty: "true"
     }
-    isLoading.value = true
+    listLoading.value = true
     try {
       MyTasks.value = await ApiDefinition.GetMyTasks.Request(request)
     } catch (error) {
       console.error('Failed to load my tasks', error)
       throw error
     } finally {
-      isLoading.value = false
+      listLoading.value = false
     }
   }
 
@@ -45,14 +79,29 @@ export const useTaskStore = defineStore('task', () => {
     const request : ApiDefinition.GetPendingTasks.IRequest = {
       empty: "true"
     }
-    isLoading.value = true
+    listLoading.value = true
     try {
       PendingTasks.value = await ApiDefinition.GetPendingTasks.Request(request)
     } catch (error) {
       console.error('Failed to load pending tasks', error)
       throw error
     } finally {
-      isLoading.value = false
+      listLoading.value = false
+    }
+  }
+
+  const loadTask = async(taskId: number)=>{
+    const request : ApiDefinition.GetTask.IRequest = {
+       taskId
+    }
+    detailLoading.value = true
+    try {
+      PlayableTask.value = await ApiDefinition.GetTask.Request(request)
+    } catch (error) {
+      console.error('Failed to load playable task', error)
+      throw error
+    } finally {
+      detailLoading.value = false
     }
   }
 
@@ -60,9 +109,24 @@ export const useTaskStore = defineStore('task', () => {
     loadAllTasks,
     loadMyTasks,
     loadPendingTasks,
+    loadTask,
+    openEditModal,
+    closeEditModal,
+    openDeleteModal,
+    closeDeleteModal,
+    openApproveModal,
+    closeApproveModal,
+    openRejectModal,
+    closeRejectModal,
+    editModalOpen,
+    deleteModalOpen,
+    approveModalOpen,
+    rejectModalOpen,
     AllTasks,
-    isLoading,
+    listLoading,
+    detailLoading,
     MyTasks,
-    PendingTasks
+    PendingTasks,
+    PlayableTask
   }
 })

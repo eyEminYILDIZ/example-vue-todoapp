@@ -10,6 +10,21 @@ const props = defineProps<{
   approveAllowed?: boolean
   rejectAllowed?: boolean
 }>()
+
+const emit = defineEmits(['onEdit', 'onDelete', 'onApprove', 'onReject'])
+
+const onEdit = (id: number) => {
+  emit('onEdit', id)
+}
+const onDelete = (id: number) => {
+  emit('onDelete', id)
+}
+const onApprove = (id: number) => {
+  emit('onApprove', id)
+}
+const onReject = (id: number) => {
+  emit('onReject', id)
+}
 </script>
 
 <template>
@@ -40,10 +55,10 @@ const props = defineProps<{
             props.editAllowed || props.deleteAllowed || props.approveAllowed || props.rejectAllowed
           "
         >
-          <button v-if="props.editAllowed">Edit</button>
-          <button v-if="props.deleteAllowed">Delete</button>
-          <button v-if="props.approveAllowed">Approve</button>
-          <button v-if="props.rejectAllowed">Reject</button>
+          <button @click="onEdit(task.id)" v-if="props.editAllowed">Edit</button>
+          <button @click="onDelete(task.id)" v-if="props.deleteAllowed">Delete</button>
+          <button @click="onApprove(task.id)" v-if="props.approveAllowed">Approve</button>
+          <button @click="onReject(task.id)" v-if="props.rejectAllowed">Reject</button>
         </td>
         <td>{{ task.id }}</td>
         <td>{{ task.title }}</td>
