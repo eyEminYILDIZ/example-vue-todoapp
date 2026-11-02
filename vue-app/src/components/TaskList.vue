@@ -29,6 +29,9 @@ const onReject = (id: number) => {
 const onDetail = (id: number) => {
   emit('onDetail', id)
 }
+
+const departments: Record<number, string> = { 1: 'HR', 2: 'Sales', 3: 'Marketing' }
+const statuses = ['Pending', 'Completed', 'Rejected']
 </script>
 
 <template>
@@ -49,7 +52,7 @@ const onDetail = (id: number) => {
         </th>
         <th>ID</th>
         <th>Title</th>
-        <th>Description</th>
+        <!-- <th>Description</th> -->
         <th>Requested by</th>
         <th>Department</th>
         <th>Status</th>
@@ -75,10 +78,10 @@ const onDetail = (id: number) => {
         </td>
         <td>{{ task.id }}</td>
         <td>{{ task.title }}</td>
-        <td>{{ task.description }}</td>
+        <!-- <td>{{ task.description }}</td> -->
         <td>{{ task.user }}</td>
-        <td>{{ task.assignedDepartment }}</td>
-        <td>{{ ['Pending', 'Completed', 'Rejected'][task.status] ?? 'Unknown' }}</td>
+        <td>{{ departments[task.assignedDepartment] ?? 'Unknown' }}</td>
+        <td>{{ statuses[task.status] ?? 'Unknown' }}</td>
       </tr>
     </tbody>
   </table>

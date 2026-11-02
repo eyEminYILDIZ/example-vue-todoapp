@@ -1,4 +1,5 @@
 import { ApiDefinition } from '@/apidef/auth-apidef'
+import type { ITaskDetail } from '@/types'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -194,6 +195,42 @@ const createModalOpen = ref(false)
     }
   }
 
+  const createTask = async(taskData: ApiDefinition.CreateTask.IRequest)=>{
+    const request : ApiDefinition.CreateTask.IRequest = taskData
+    detailLoading.value = true
+    try {
+      await ApiDefinition.CreateTask.Request(request)
+
+      await loadMyTasks()
+    } catch (error) {
+      console.error('Failed to create task', error)
+      throw error
+    } finally {
+      detailLoading.value = false
+      closeCreateModal()
+    }
+  }
+
+  const editTask = async(taskData: ITaskDetail)=>{
+    const request : ApiDefinition.UpdateTask.IRequest = {
+      taskId: taskData.id,
+      title: taskData.title,
+      description: taskData.description,
+    }
+    detailLoading.value = true
+    try {
+      await ApiDefinition.UpdateTask.Request(request)
+
+      await loadMyTasks()
+    } catch (error) {
+      console.error('Failed to update task', error)
+      throw error
+    } finally {
+      detailLoading.value = false
+      closeEditModal()
+    }
+  }
+
   return {
     resetAPI,
     loadAllTasks,
@@ -215,6 +252,8 @@ const createModalOpen = ref(false)
     rejectTask,
     openDetailModal,
     closeDetailModal,
+    createTask,
+    editTask,
     resetLoading,
     editModalOpen,
     deleteModalOpen,

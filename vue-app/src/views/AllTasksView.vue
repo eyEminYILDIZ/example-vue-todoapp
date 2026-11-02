@@ -2,10 +2,16 @@
 import { useTaskStore } from '@/stores/TaskStore'
 import { onMounted, ref, watch } from 'vue'
 import TaskList from '@/components/TaskList.vue'
-import type { ITaskRow } from '@/types'
+import type { ITaskRow, ITaskDetail } from '@/types'
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 
 const taskStore = useTaskStore()
 const tasks = ref<ITaskRow[]>([])
+const taskDetail = ref<ITaskDetail | null>(null)
+
+const departments: Record<number, string> = { 1: 'HR', 2: 'Sales', 3: 'Marketing' }
+const statuses = ['Pending', 'Completed', 'Rejected']
+
 onMounted(async () => {
   await taskStore.loadAllTasks()
 })
@@ -26,6 +32,14 @@ watch(
 
 const onDetailTask = async (taskId: number) => {
   await taskStore.loadTask(taskId)
+  taskDetail.value = {
+    id: taskStore.PlayableTask?.id ?? -1,
+    title: taskStore.PlayableTask?.title ?? '',
+    description: taskStore.PlayableTask?.description ?? '',
+    user: taskStore.PlayableTask?.user.name ?? '',
+    assignedDepartment: taskStore.PlayableTask?.assignedDepartment ?? -1,
+    status: taskStore.PlayableTask?.status ?? -1,
+  }
   taskStore.openDetailModal()
 }
 </script>
@@ -52,20 +66,43 @@ const onDetailTask = async (taskId: number) => {
         <DialogPanel class="dialog-panel">
           <DialogTitle class="dialog-title">Task Details</DialogTitle>
 
-          <p class="dialog-body"><strong>Title:</strong> {{ taskStore.PlayableTask?.title }}</p>
-          <p class="dialog-body">
-            <strong>Description:</strong> {{ taskStore.PlayableTask?.description }}
-          </p>
-          <p class="dialog-body">
-            <strong>Requested by:</strong> {{ taskStore.PlayableTask?.user?.name }}
-          </p>
-          <p class="dialog-body">
-            <strong>Department:</strong> {{ taskStore.PlayableTask?.assignedDepartment }}
-          </p>
-          <p class="dialog-body">
-            <strong>Status:</strong>
-            {{ ['Pending', 'Completed', 'Rejected'][taskStore.PlayableTask?.status] ?? 'Unknown' }}
-          </p>
+          <div class="dialog-form" v-if="taskDetail != null">
+            <label class="dialog-field">
+              <span>Title</span>
+              <input
+                v-model="taskDetail.title"
+                type="text"
+                placeholder="Enter task title"
+                disabled
+              />
+            </label>
+            <label class="dialog-field">
+              <span>Description</span>
+              <textarea
+                v-model="taskDetail.description"
+                placeholder="Enter task description"
+                disabled
+              ></textarea>
+            </label>
+            <label class="dialog-field">
+              <span>Requested by</span>
+              <input v-model="taskDetail.user" type="text" disabled />
+            </label>
+            <label class="dialog-field">
+              <span>Department</span>
+              <select v-model="taskDetail.assignedDepartment" disabled>
+                <option v-for="(name, id) in departments" :key="id" :value="Number(id)">
+                  {{ name }}
+                </option>
+              </select>
+            </label>
+            <label class="dialog-field">
+              <span>Status</span>
+              <select v-model="taskDetail.status" disabled>
+                <option v-for="(name, id) in statuses" :key="id" :value="id">{{ name }}</option>
+              </select>
+            </label>
+          </div>
 
           <div class="dialog-actions">
             <button @click="taskStore.closeDetailModal()">Close</button>

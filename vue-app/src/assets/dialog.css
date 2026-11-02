@@ -21,6 +21,24 @@
   .dialog-body {
     @apply mt-4 text-sm;
   }
+  .dialog-form {
+    @apply mt-4 flex flex-col gap-3 text-sm;
+  }
+  .dialog-field {
+    @apply flex flex-col gap-1;
+  }
+  .dialog-field > span {
+    @apply font-medium text-(--muted);
+  }
+  .dialog-field :is(input, textarea, select) {
+    @apply w-full rounded-md border border-(--border) bg-(--surface) px-3 py-2 text-(--text);
+  }
+  .dialog-field :is(input, textarea, select):disabled {
+    @apply bg-(--bg) text-(--muted) cursor-not-allowed;
+  }
+  .dialog-field textarea {
+    @apply min-h-24 resize-y;
+  }
   .dialog-actions {
     @apply mt-6 flex justify-end gap-2;
   }

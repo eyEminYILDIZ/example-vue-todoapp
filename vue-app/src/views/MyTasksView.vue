@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/TaskStore'
 import { onMounted, ref, watch } from 'vue'
+import type { ITaskDetail } from '@/types'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 import type { ITaskRow } from '@/types'
 import TaskList from '@/components/TaskList.vue'
@@ -26,8 +27,20 @@ watch(
   },
 )
 
+const departments: Record<number, string> = { 1: 'HR', 2: 'Sales', 3: 'Marketing' }
+const statuses = ['Pending', 'Completed', 'Rejected']
+
+const taskDetail = ref<ITaskDetail | null>(null)
 const onEditTask = async (taskId: number) => {
   await taskStore.loadTask(taskId)
+  taskDetail.value = {
+    id: taskStore.PlayableTask?.id ?? -1,
+    title: taskStore.PlayableTask?.title ?? '',
+    description: taskStore.PlayableTask?.description ?? '',
+    user: taskStore.PlayableTask?.user.name ?? '',
+    assignedDepartment: taskStore.PlayableTask?.assignedDepartment ?? -1,
+    status: taskStore.PlayableTask?.status ?? -1,
+  }
   taskStore.openEditModal()
 }
 
@@ -61,13 +74,47 @@ const onDeleteTask = async (taskId: number) => {
         <DialogPanel class="dialog-panel">
           <DialogTitle class="dialog-title">Edit Task</DialogTitle>
 
-          <p class="dialog-body">
-            Are you sure you want to edit this task? Make the necessary changes and save them.
-          </p>
+          <div class="dialog-form" v-if="taskDetail != null">
+            <label class="dialog-field">
+              <span>Title</span>
+              <input
+                v-model="taskDetail.title"
+                type="text"
+                placeholder="Enter task title"
+                required
+              />
+            </label>
+            <label class="dialog-field">
+              <span>Description</span>
+              <textarea
+                v-model="taskDetail.description"
+                placeholder="Enter task description"
+                required
+              ></textarea>
+            </label>
+            <label class="dialog-field">
+              <span>Requested by</span>
+              <input v-model="taskDetail.user" type="text" disabled />
+            </label>
+            <label class="dialog-field">
+              <span>Department</span>
+              <select v-model="taskDetail.assignedDepartment" disabled>
+                <option v-for="(name, id) in departments" :key="id" :value="Number(id)">
+                  {{ name }}
+                </option>
+              </select>
+            </label>
+            <label class="dialog-field">
+              <span>Status</span>
+              <select v-model="taskDetail.status" disabled>
+                <option v-for="(name, id) in statuses" :key="id" :value="id">{{ name }}</option>
+              </select>
+            </label>
+          </div>
 
           <div class="dialog-actions">
             <button @click="taskStore.closeEditModal()">Cancel</button>
-            <button class="primary" @click="taskStore.closeEditModal()">Save</button>
+            <button class="primary" @click="taskStore.editTask(taskDetail!)">Save</button>
           </div>
         </DialogPanel>
       </div>
