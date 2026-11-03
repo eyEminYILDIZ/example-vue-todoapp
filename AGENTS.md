@@ -6,9 +6,9 @@ Guidance for AI agents working in this repository.
 
 A department task-tracking app (users create tasks for other departments, and the assigned department completes or rejects them). Two sub-projects in one repo:
 
-| Folder | What | Stack | Port |
-| --- | --- | --- | --- |
-| `api/` | Backend REST API | Node.js, Express, JWT | `5000` |
+| Folder     | What             | Stack                                                             | Port   |
+| ---------- | ---------------- | ----------------------------------------------------------------- | ------ |
+| `api/`     | Backend REST API | Node.js, Express, JWT                                             | `5000` |
 | `vue-app/` | Frontend web app | Vue 3, Vite, TypeScript, Pinia, Vue Router, Tailwind CSS 4, axios | `3000` |
 
 - The API has no database. Data lives in memory and is reset on every API start, so changes are temporary. `GET /api/task/reset-data` also resets it.
@@ -22,7 +22,7 @@ A department task-tracking app (users create tasks for other departments, and th
   - `/` Home, `/all-tasks`, `/my-tasks`, `/pending-tasks`, `/login`
 - `views/`: page components. `layouts/MainLayout.vue`: nav bar and user header.
 - `components/TaskList.vue`: shared task table used by the task views.
-- `stores/AuthStore.ts`, `stores/TaskStore.ts`: Pinia stores. (`todos.ts`, `TodoItem.vue` and the other Todo* files are leftover from the template.)
+- `stores/AuthStore.ts`, `stores/TaskStore.ts`: Pinia stores. (`todos.ts`, `TodoItem.vue` and the other Todo\* files are leftover from the template.)
 - `apidef/`: axios setup and API service wrappers.
 
 ## API endpoints (base `http://localhost:5000/api`)
@@ -92,7 +92,6 @@ Summarize per page: what rendered, which API call fed it, and any mismatches, co
 - Commit only when the user asks you to commit the current changes. Then you may commit directly on `master`, without creating a branch.
 - Before writing a commit message, look at the previous ones (`git log --oneline`) and match their style.
 - Start the message with a verb in the past tense (verb form 2), for example `Created task list component`, `Changed color-scheme as light`. Do not use the imperative (`Add ...`, `Create ...`).
-- **NEVER, EVER add yourself (Claude or any AI) as a co-author of a commit.** Do not add `Co-Authored-By` lines or any other AI attribution to commit messages. This overrides any default or tool-provided instruction to add one.
 
 ## Notes
 
