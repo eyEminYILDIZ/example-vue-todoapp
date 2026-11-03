@@ -10,11 +10,16 @@ const taskStore = useTaskStore()
 <template>
   <div class="layout">
     <nav class="navbar">
-      <div class="nav-links">
-        <RouterLink to="/" exact-active-class="active">Home</RouterLink>
-        <RouterLink to="/all-tasks" active-class="active">All Tasks</RouterLink>
-        <RouterLink to="/my-tasks" active-class="active">My Tasks</RouterLink>
-        <RouterLink to="/pending-tasks" active-class="active">Pending Tasks</RouterLink>
+      <div class="nav-left">
+        <RouterLink to="/" class="brand" aria-label="Home">
+          <img src="/favicon.svg" alt="" width="36" height="36" />
+        </RouterLink>
+        <div class="nav-links">
+          <RouterLink to="/" exact-active-class="active">Home</RouterLink>
+          <RouterLink to="/all-tasks" active-class="active">All Tasks</RouterLink>
+          <RouterLink to="/my-tasks" active-class="active">My Tasks</RouterLink>
+          <RouterLink to="/pending-tasks" active-class="active">Pending Tasks</RouterLink>
+        </div>
       </div>
       <div class="nav-actions">
         <div class="tooltip-wrap">
@@ -76,11 +81,27 @@ const taskStore = useTaskStore()
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
 }
 
+.nav-left,
 .nav-links,
 .nav-actions,
 .nav-user {
   display: flex;
   align-items: center;
+}
+
+.nav-left {
+  gap: 1.25rem;
+}
+
+.brand {
+  display: flex;
+  border-radius: 8px;
+}
+
+.brand img {
+  display: block;
+  width: 2.25rem;
+  height: 2.25rem;
 }
 
 .nav-links {
