@@ -41,7 +41,6 @@ const onRejectTask = async (taskId: number) => {
 
 <template>
   <main class="tasks-page">
-    <h1>Pending Tasks</h1>
     <LoadingSpinner :show="taskStore.listLoading" label="Loading tasks..." />
     <TaskList
       v-if="!taskStore.listLoading"

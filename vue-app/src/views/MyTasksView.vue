@@ -66,8 +66,7 @@ const onDeleteTask = async (taskId: number) => {
 
 <template>
   <main class="tasks-page">
-    <div class="flex justify-between items-center">
-      <h1>My Tasks</h1>
+    <div class="flex justify-end items-center mb-4">
       <button class="primary" @click="onCreateTask">Create Task</button>
     </div>
     <LoadingSpinner :show="taskStore.listLoading" label="Loading tasks..." />

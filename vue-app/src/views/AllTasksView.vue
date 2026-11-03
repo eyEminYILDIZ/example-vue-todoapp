@@ -47,7 +47,6 @@ const onDetailTask = async (taskId: number) => {
 
 <template>
   <main class="tasks-page">
-    <h1>All Tasks</h1>
     <LoadingSpinner :show="taskStore.listLoading" label="Loading tasks..." />
     <TaskList
       v-if="!taskStore.listLoading"
