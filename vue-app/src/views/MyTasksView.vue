@@ -3,6 +3,7 @@ import { useTaskStore } from '@/stores/TaskStore'
 import { onMounted, ref, watch } from 'vue'
 import type { ITaskDetail } from '@/types'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
+import { PlusIcon } from '@heroicons/vue/24/solid'
 import type { ITaskRow } from '@/types'
 import TaskList from '@/components/TaskList.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
@@ -67,7 +68,10 @@ const onDeleteTask = async (taskId: number) => {
 <template>
   <main class="tasks-page">
     <div class="flex justify-end items-center mb-4">
-      <button class="primary" @click="onCreateTask">Create Task</button>
+      <button class="primary inline-flex items-center gap-1.5" @click="onCreateTask">
+        <PlusIcon class="size-4" />
+        Create Task
+      </button>
     </div>
     <LoadingSpinner :show="taskStore.listLoading" label="Loading tasks..." />
     <TaskList
